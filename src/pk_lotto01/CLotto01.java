@@ -4,45 +4,32 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 public class CLotto01 {
-    public static final int RAND_NUMS = 100;
-    public static List<Integer> randomList = new ArrayList<>();
-
-    public static void fillRandomList(){
-        Random random = new Random();
-        for(int i = 0; i < RAND_NUMS; i++){
-            int rand = random.nextInt(49)+1;
-            randomList.add(rand);
+    public static void doOneLottoDrawing_Simplified(){
+        List<Integer> lottoNumbersList = new ArrayList<>();
+        for(int i = 0; i < 49; i++){
+            lottoNumbersList.add(i+1); //1-49
         }
-        //System.out.println(randomList);
-    }
-
-    public static void doOneLottoDrawing(){
-        List<Integer> lottoList = new ArrayList<>();
-        List<Integer> uniqueRandomList = randomList
-                .stream()
-                .distinct()
-                .collect(Collectors.toList());
-        System.out.println("UniqueRandomList: " + uniqueRandomList); //1-49
-        int size = uniqueRandomList.size(); //UBound()+1
-        int counter = 0;
+        List<Integer> lottoDrawSixList = new ArrayList<>();
         Random random = new Random();
-        while(counter < 6){
-            int randomIndex = random.nextInt(size); //0 to (size-1)
-            Integer randomValue = uniqueRandomList.get(randomIndex);
-            if (!lottoList.contains(randomValue)){
-                lottoList.add(randomValue);
-                counter+=1;
+        int uniqueCounter = 0, randomIndex, randomLottoNumber;
+        while(uniqueCounter < 6){
+            randomIndex = random.nextInt(49); //0-48
+            randomLottoNumber = lottoNumbersList.get(randomIndex);
+            if(!lottoDrawSixList.contains(randomLottoNumber)){
+                lottoDrawSixList.add(randomLottoNumber);
+                uniqueCounter+=1;
             }
         }
-        lottoList.sort(Integer::compareTo);
-        System.out.println("LottoDrawingResult: " + lottoList);
+        //Comparator<Integer> comp = (number1, number2) -> {return number1.compareTo(number2);};
+        Comparator<Integer> comp = Comparator.naturalOrder();
+        lottoDrawSixList.sort(comp);
+        System.out.println("Lotto Numbers drawn: " + lottoDrawSixList);
     }
-
     public static void main(String[] args) {
-        fillRandomList();
-        doOneLottoDrawing();
+        for(int i = 0; i < 20; i++){
+            doOneLottoDrawing_Simplified();
+        }
     }
 }
